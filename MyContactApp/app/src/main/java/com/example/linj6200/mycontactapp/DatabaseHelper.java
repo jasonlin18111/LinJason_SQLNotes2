@@ -10,8 +10,8 @@ import android.widget.TableLayout;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION =2;
-    public static final String DATABASE_NAME = "Contact2018-2.db";
+    public static final int DATABASE_VERSION =5;
+    public static final String DATABASE_NAME = "Contact2018-5.db";
     public static final String TABLE_NAME = "Contact2018_table";
     public static final String ID = "ID";
     public static final String COLUMN_NAME_CONTACT = "NAME";
@@ -47,10 +47,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME_CONTACT, name);
-        contentValues.put(COLUMN_ADDRESS_CONTACT, address);
         contentValues.put(COLUMN_PHONE_NUMBER_CONTACT, number);
+        contentValues.put(COLUMN_ADDRESS_CONTACT, address);
         Long result = db.insert(TABLE_NAME, null, contentValues);
-        Log.d("MyContactApp", result.toString());
         if(result == -1){
             Log.d("MyContactApp", "DatabaseHelper: Contact insert - FAILED");
             return false;
