@@ -1,5 +1,6 @@
 package com.example.linj6200.mycontactapp;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     EditText editName;
     EditText editNumber;
     EditText editAddress;
+    EditText editSearch;
+    private String string = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         editName = (EditText) findViewById(R.id.editText_name);
         editNumber = (EditText) findViewById(R.id.editText_number);
         editAddress = (EditText) findViewById(R.id.editText_address);
+        editSearch = (EditText) findViewById(R.id.editText_Search);
 
         myDb = new DatabaseHelper(this);
         Log.d("MyContactApp", "MainActivity: instantiated myDb");
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             buffer.append("\nAddress: " + res.getString(3));
         }
         showMessage("Data", buffer.toString());
+        string = buffer.toString();
     }
 
     private void showMessage(String title, String message){
@@ -68,5 +73,26 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(message);
         builder.show();
     }
-//*/
+
+    public static final String EXTRA_MESSAGE = "com.example.linj6200.mycontactapp MESSAGE";
+    public void searchRecord(View view ){
+        Log.d("MyContactApp", "MainActivity: Launching SearchActivity");
+        Intent intent = new Intent(this, SearchActivity.class);
+        int index = string.indexOf(editSearch.getText().toString());
+        String str = "Name: ";
+        if(index>=0) {
+            for (int i = 0; i < 3; i++) {
+                Log.d("MyContactApp", "MainActivity: Launching SearchActivity2");
+                while (string.substring(index).indexOf("\n") != 0){
+                    Log.d("MyContactApp", "MainActivity: Launching SearchActivity3");
+                    str += string.substring(index, index + 1);
+                    index++;
+                }
+                str += "\n";
+                index++;
+            }
+        }
+        intent.putExtra(EXTRA_MESSAGE, str);
+        startActivity(intent);
+    }
 }
