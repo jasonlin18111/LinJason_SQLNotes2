@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper myDb;
@@ -78,17 +80,26 @@ public class MainActivity extends AppCompatActivity {
     public void searchRecord(View view ){
         Log.d("MyContactApp", "MainActivity: Launching SearchActivity");
         Intent intent = new Intent(this, SearchActivity.class);
-        int index = string.indexOf(editSearch.getText().toString());
-        String str = "Name: ";
-        if(index>=0) {
-            for (int i = 0; i < 3; i++) {
-                Log.d("MyContactApp", "MainActivity: Launching SearchActivity2");
-                while (string.substring(index).indexOf("\n") != 0){
-                    Log.d("MyContactApp", "MainActivity: Launching SearchActivity3");
-                    str += string.substring(index, index + 1);
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        for(int i = 0; i<string.length(); i++){
+            if(string.substring(i).indexOf("Name: " + editSearch.getText().toString())==0){
+                indexes.add(i);
+            }
+        }
+        Log.d("MyContactApp", String.valueOf(indexes));
+        String str = "";
+        for(int index: indexes) {
+            if (index >= 0 && index<string.length()) {
+                for (int i = 0; i < 3; i++) {
+                    Log.d("MyContactApp", "MainActivity: Launching SearchActivity2");
+                    while (string.substring(index).indexOf("\n") != 0) {
+                        Log.d("MyContactApp", "MainActivity: Launching SearchActivity3");
+                        str += string.substring(index, index + 1);
+                        index++;
+                    }
                     index++;
+                    str += "\n";
                 }
-                str += "\n";
                 index++;
             }
         }
