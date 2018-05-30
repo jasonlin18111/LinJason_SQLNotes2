@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         editNumber = (EditText) findViewById(R.id.editText_number);
         editAddress = (EditText) findViewById(R.id.editText_address);
         editSearch = (EditText) findViewById(R.id.editText_Search);
-
         myDb = new DatabaseHelper(this);
         Log.d("MyContactApp", "MainActivity: instantiated myDb");
     }
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-///*
+
     public void viewData(View view){
         Cursor res = myDb.getAllData();
         Log.d("MyContactApp", "MainActivity: viewData: received cursor");
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             //Delimit each of the "appends" with line feed "\n"
             buffer.append("\nName: " + res.getString(1));
             buffer.append("\nNumber: " + res.getString(2));
-            buffer.append("\nAddress: " + res.getString(3));
+            buffer.append("\nAddress: " + res.getString(3) + "\n");
         }
         showMessage("Data", buffer.toString());
         string = buffer.toString();
@@ -77,26 +76,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static final String EXTRA_MESSAGE = "com.example.linj6200.mycontactapp MESSAGE";
-    public void searchRecord(View view ){
+    public void searchRecord(View view){
         Log.d("MyContactApp", "MainActivity: Launching SearchActivity");
+        String str = "";
         Intent intent = new Intent(this, SearchActivity.class);
         ArrayList<Integer> indexes = new ArrayList<Integer>();
         for(int i = 0; i<string.length(); i++){
             if(string.substring(i).indexOf("Name: " + editSearch.getText().toString())==0){
                 indexes.add(i);
             }
+            else{
+                str="No match found in Database";
+            }
         }
         Log.d("MyContactApp", String.valueOf(indexes));
-        String str = "";
+
         for(int index: indexes) {
-            if (index >= 0 && index<string.length()) {
+            if (index >= 0 && index<string.length()){
                 for (int i = 0; i < 3; i++) {
                     Log.d("MyContactApp", "MainActivity: Launching SearchActivity2");
-                    while (string.substring(index).indexOf("\n") != 0) {
-                        Log.d("MyContactApp", "MainActivity: Launching SearchActivity3");
-                        str += string.substring(index, index + 1);
-                        index++;
-                    }
+                        while (string.substring(index).indexOf("\n") != 0) {
+                            Log.d("MyContactApp", "MainActivity: Launching SearchActivity3");
+                            if (index >= 0 && index < string.length()) {
+                                str += string.substring(index, index + 1);
+                            }
+                            index++;
+                        }
                     index++;
                     str += "\n";
                 }
